@@ -75,15 +75,19 @@ const usersCollectionRef = collection(db, "users");
 const reducer = (state: any, action: any) => {
   switch (action.type) {
     case "UPDATE":
-      console.log(state, action.payload);
-      return { ...state, ...action.payload }; //, ...action.payload
+      // console.log("업데이트 진입");
+      // console.log("state : ", state);
+      // console.log("action.payload : ", action.payload);
+      // state = action.payload;
+      return { ...action.payload }; //...state,
     default:
       return state;
   }
 };
 function Todo() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [users, setUsers] = useState<User[]>([]);
+  // const [users, setUsers] = useState<User[]>([]);
+  let users = [];
   const getUsers = async () => {
     const data = await getDocs(usersCollectionRef);
     if (data !== null) {
@@ -93,7 +97,8 @@ function Todo() {
           name: doc.data().name,
           age: doc.data().age,
         };
-        setUsers((users) => [...users, result]);
+        // setUsers((users) => [...users, result]);
+        users = [...users, result];
       });
       dispatch({ type: "UPDATE", payload: users });
     }
@@ -125,23 +130,26 @@ function Todo() {
 
   return (
     <>
-      {/* {users.map((item, index) => {
+      {users.map((item, index) => {
         return (
           <div key={item.id}>
             {item.name} {item.age}
           </div>
         );
-      })} */}
+      })}
       {/* {state.map((item, index) => {
         return (
           <div key={item.id}>
+            {index}
             {item.name} {item.age}
           </div>
         );
       })} */}
       <button
         onClick={() => {
-          console.log(state);
+          //dispatch({ type: "UPDATE", payload: users });
+          // console.log("users : ", users);
+          console.log("state : ", state);
         }}
       >
         check state
